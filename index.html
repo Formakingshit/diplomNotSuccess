@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Marker Clustering</title>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+
+<script>
+    let number = 10;
+    let someLat = 0;
+    let someLng = 0;
+
+    let uluru = [];
+    for (let i = 0; i < number; i++) {
+        uluru[i] = {lat: someLat, lng: someLng};
+        someLng += 10;
+    }
+
+    function initMap() {
+
+
+        myOptions = {
+            zoom: 2,
+            center: uluru[0]
+        };
+        map = new google.maps.Map(document.getElementById('map'), myOptions);
+
+        let manymarker = [number];
+
+        for (let i = 0; i < number; i++) {
+            manymarker[i] = new google.maps.Marker({
+                position: uluru[i],
+                map: map,
+                icon: {
+                    url: "1.png",
+                    scaledSize: new google.maps.Size(64, 64)
+                },
+                title: "Долгота: " + uluru[i].lat + "  Широта: " + uluru[i].lng
+            });
+
+        }
+
+
+//       marker.setMap( map );
+        moveMarker(map, manymarker);
+
+    }
+
+    function moveMarker(map, manymarker) {
+        var i = 0;
+        //delayed so you can see it move
+        let timeOut = setTimeout(function tik() {
+            for (let k = 0; k < number; k++) {
+                manymarker[k].setPosition(new google.maps.LatLng(uluru[k].lat = +i, uluru[k].lng));
+                manymarker[k].setTitle("Долгота: " + uluru[k].lat + "  Широта: " + uluru[k].lng);
+                //   map.panTo( new google.maps.LatLng( 60, 60 ) );
+            }
+
+            i += 5;
+
+            if (i < 40) {
+                setTimeout(tik, 1500);
+            }
+
+        }, 1500);
+
+    };
+
+    initMap();
+</script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuo95NVX4s7OnbyDJNphACRF8pP0Xaq50&callback=initMap">
+</script>
+</body>
+</html>
